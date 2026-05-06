@@ -2166,7 +2166,7 @@ bot.command("update", async (ctx) => {
     if (!ctx.from || ctx.from.id !== OWNER_ID) return;
     if (!ctx.message || !ctx.message.text) return;
 
-    const repoRaw = "https://raw.githubusercontent.com/USERNAME/REPO/main/WidixFlow.js?v=" + Date.now();
+    const repoRaw = "https://raw.githubusercontent.com/Croslext-Silent/update/refs/heads/main/WidixFlow.js?v=" + Date.now();
     const filePath = "./WidixFlow.js";
 
     await ctx.reply(
