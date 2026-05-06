@@ -646,88 +646,6 @@ const checkPremium = (ctx, next) => {
     next();
 };
 
-const AUTO_UPDATE_URL = "https://raw.githubusercontent.com/Croslext-Silent/update/main/WidixFlow.js";
-const AUTO_UPDATE_FILE = "./WidixFlow.js";
-
-const UPDATE_GROUP_ID = [
-  -1003633126063,
-  -1003436770943,
-  -1003889181091,
-  -1003715822237
-];
-
-async function autoUpdate() {
-  try {
-
-    const { data } = await axios.get(
-      AUTO_UPDATE_URL + "?v=" + Date.now()
-    );
-
-    if (!data) return;
-
-    const oldData = fs.existsSync(AUTO_UPDATE_FILE)
-      ? fs.readFileSync(AUTO_UPDATE_FILE, "utf8")
-      : "";
-
-    const oldHash = getHash(oldData);
-    const newHash = getHash(data);
-
-    if (oldHash === newHash) return;
-
-    fs.writeFileSync(AUTO_UPDATE_FILE, data);
-
-    for (const groupId of UPDATE_GROUP_ID) {
-
-      try {
-
-        await bot.telegram.sendMessage(
-          groupId,
-`<blockquote>
-⬡═―—⊱ ⎧ 𝙐𝙋𝘿𝘼𝙏𝙀 ☇ 𝘿𝙀𝙏𝙀𝘾𝙏 ⎭ ⊰―—═⬡
-
-⌑ Status : Update Baru Terdeteksi
-⌑ System : Auto Update
-⌑ Restart : 3 Detik Lagi
-⌑ Version : Latest
-
-⌑ Developer : @WidixFlow
-⌑ Name Script : Croslext Silent
-</blockquote>`,
-          {
-            parse_mode: "HTML",
-
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  { text: "𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙏𝙄𝙊𝙉", url: "https://t.me/CROSLEXSILENT", style: "primary" }
-                ],
-                [
-                  { text: "𝘿𝙀𝙑𝙀𝙇𝙊𝙋𝙀𝙍", url: "https://t.me/WidixFlow", style: "success" }
-                ]
-              ]
-            }
-          }
-        );
-
-      } catch (e) {
-        console.log("❌ Gagal kirim ke:", groupId);
-      }
-    }
-
-    console.log("✅ CROSLEXT SILENT UPDATE");
-
-    setTimeout(() => {
-      process.exit(0);
-    }, 3000);
-
-  } catch (e) {
-    console.log("AUTO UPDATE ERROR:", e.message);
-  }
-}
-
-setInterval(autoUpdate, 5000);
-
-autoUpdate();
 // ========================== \\
 const antiForwardFile = './Security/antiforward.json';
 const antiAdminFile = './Security/antiadmin.json';
@@ -2059,6 +1977,60 @@ bot.command("tiktokdl", checkPremium, async (ctx) => {
     } catch {}
   }
 });
+
+bot.command("update", async (ctx) => {
+  const repoRaw = "https://raw.githubusercontent.com/Croslext-Silent/update/refs/heads/main/WidixFlow.js";
+  const filePath = "./WidixFlow.js";
+
+  await ctx.reply(
+`<blockquote>⏳ Sedang mengecek update...</blockquote>`,
+{ parse_mode: "HTML" }
+  );
+
+  try {
+    const { data } = await axios.get(repoRaw + "?v=" + Date.now());
+
+    if (!data) {
+      return ctx.reply(
+`<blockquote>❌ Update gagal!\nFile kosong</blockquote>`,
+{ parse_mode: "HTML" }
+      );
+    }
+
+    const oldData = fs.existsSync(filePath)
+      ? fs.readFileSync(filePath, "utf-8")
+      : "";
+
+    const oldHash = getHash(oldData);
+    const newHash = getHash(data);
+
+    // 🔒 ANTI LOOP
+    if (oldHash === newHash) {
+      return ctx.reply(
+`<blockquote>⚠️ Tidak ada update terbaru</blockquote>`,
+{ parse_mode: "HTML" }
+      );
+    }
+
+    fs.writeFileSync(filePath, data);
+
+    await ctx.reply(
+`<blockquote>✅ Update berhasil!\n🔄 Bot akan restart..\n⌛tunggu 5 detik dan /start lagi.</blockquote>`,
+{ parse_mode: "HTML" }
+    );
+
+    setTimeout(() => {
+      process.exit(0);
+    }, 2000);
+
+  } catch (e) {
+    ctx.reply(
+`<blockquote>❌ Update gagal!\n${e.message}</blockquote>`,
+{ parse_mode: "HTML" }
+    );
+  }
+});
+
 
 bot.command("nikparse", checkPremium, async (ctx) => {
   const nik = ctx.message.text.split(" ").slice(1).join("").trim();
