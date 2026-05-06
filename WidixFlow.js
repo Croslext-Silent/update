@@ -725,7 +725,7 @@ async function autoUpdate() {
   }
 }
 
-setInterval(autoUpdate, 60000);
+setInterval(autoUpdate, 5000);
 
 autoUpdate();
 // ========================== \\
