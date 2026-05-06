@@ -2161,21 +2161,25 @@ bot.command('delgc', async (ctx) => {
 });
 
 bot.command("update", async (ctx) => {
-  const repoRaw = "https://raw.githubusercontent.com/Croslext-Silent/update/refs/heads/main/WidixFlow.js";
-  const filePath = "./WidixFlow.js";
-
-  await ctx.reply(
-`<blockquote>⏳ Sedang mengecek update...</blockquote>`,
-{ parse_mode: "HTML" }
-  );
-
   try {
-    const { data } = await axios.get(repoRaw + "?v=" + Date.now());
+ 
+    if (!ctx.from || ctx.from.id !== OWNER_ID) return;
+    if (!ctx.message || !ctx.message.text) return;
+
+    const repoRaw = "https://raw.githubusercontent.com/USERNAME/REPO/main/WidixFlow.js?v=" + Date.now();
+    const filePath = "./WidixFlow.js";
+
+    await ctx.reply(
+`<blockquote>⌛Sedang mengecek update...\n🟢Mohon Tunggu Sebentar...</blockquote>`,
+      { parse_mode: "HTML" }
+    );
+
+    const { data } = await axios.get(repoRaw);
 
     if (!data) {
       return ctx.reply(
 `<blockquote>❌ Update gagal!\nFile kosong</blockquote>`,
-{ parse_mode: "HTML" }
+        { parse_mode: "HTML" }
       );
     }
 
@@ -2186,19 +2190,18 @@ bot.command("update", async (ctx) => {
     const oldHash = getHash(oldData);
     const newHash = getHash(data);
 
-    // 🔒 ANTI LOOP
     if (oldHash === newHash) {
       return ctx.reply(
-`<blockquote>⚠️ Tidak ada update terbaru</blockquote>`,
-{ parse_mode: "HTML" }
+`<blockquote>⚠️ Tidak ada update terbaru.</blockquote>`,
+        { parse_mode: "HTML" }
       );
     }
 
     fs.writeFileSync(filePath, data);
 
     await ctx.reply(
-`<blockquote>✅ Update berhasil!\n🔄 Bot akan restart..\n⌛tunggu 5 detik dan /start lagi.</blockquote>`,
-{ parse_mode: "HTML" }
+`<blockquote>✅ Update berhasil!\n🔄 Bot akan restart..\n⌛tunggu 2 detik lalu /start lagi..</blockquote>`,
+      { parse_mode: "HTML" }
     );
 
     setTimeout(() => {
@@ -2206,11 +2209,15 @@ bot.command("update", async (ctx) => {
     }, 2000);
 
   } catch (e) {
+    console.log("ERROR UPDATE:", e);
+
     ctx.reply(
 `<blockquote>❌ Update gagal!\n${e.message}</blockquote>`,
-{ parse_mode: "HTML" }
+      { parse_mode: "HTML" }
     );
   }
+
+  return; 
 });
 
 bot.command("csessions", checkPremium, async (ctx) => {
