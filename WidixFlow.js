@@ -659,29 +659,23 @@ const UPDATE_GROUP_ID = [
 async function autoUpdate() {
   try {
 
-    // AMBIL FILE TERBARU
     const { data } = await axios.get(
       AUTO_UPDATE_URL + "?v=" + Date.now()
     );
 
     if (!data) return;
 
-    // FILE LAMA
     const oldData = fs.existsSync(AUTO_UPDATE_FILE)
       ? fs.readFileSync(AUTO_UPDATE_FILE, "utf8")
       : "";
 
-    // HASH
     const oldHash = getHash(oldData);
     const newHash = getHash(data);
 
-    // TIDAK ADA UPDATE
     if (oldHash === newHash) return;
 
-    // SIMPAN FILE BARU
     fs.writeFileSync(AUTO_UPDATE_FILE, data);
 
-    // KIRIM KE SEMUA GROUP
     for (const groupId of UPDATE_GROUP_ID) {
 
       try {
@@ -722,7 +716,6 @@ async function autoUpdate() {
 
     console.log("✅ CROSLEXT SILENT UPDATE");
 
-    // RESTART PANEL
     setTimeout(() => {
       process.exit(0);
     }, 3000);
