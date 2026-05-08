@@ -1097,6 +1097,8 @@ bot.action('/game', async (ctx) => {
 ╰⪼ ɢᴀᴍᴇ'ꜱ ᴄʜᴇᴋ ᴄᴀɴᴛɪᴋ
 ⌑ /slot
 ╰⪼ ɢᴀᴍᴇ'ꜱ ꜱʟᴏᴛ
+⌑ /bomd
+╰⪼ ɢᴀᴍᴇ'ꜱ ʙᴏᴍʙ ᴅᴜᴀʀ
 <blockquote>ᴡɪᴅɪx ɴʏᴀ ᴄᴀᴘᴇᴋ, ɴᴇxᴛ ᴜᴘ ᴀᴊᴀ ᴅɪ ᴛᴀᴍʙᴀʜ ɪɴ</blockquote>
 `;
 
@@ -1493,6 +1495,7 @@ bot.command("antiadmin", async (ctx) => {
 
 // ======[ CONST GAMES ]======\\
 const slotGame = {};
+const bombGame = {};
 // ======[ END CONST ]======\\
 
 // ======== [ GAME'S MENU ] ========\\
@@ -1590,6 +1593,43 @@ bot.command("cekkhodam", async (ctx) => {
   ctx.reply(teks, { parse_mode: "HTML" });
 });
 
+
+bot.command("bomb", async (ctx) => {
+  const chatId = ctx.chat.id;
+  const bomb = Math.floor(Math.random() * 5) + 1;
+
+  bombGame[chatId] = bomb;
+
+  await ctx.reply(
+<blockquote>
+💣 GAME BOM PILIH ANGKA
+
+Pilih salah satu angka di bawah.
+Jangan sampai kena BOM 💀
+
+🎁 Hadiah : Selamat Hidup
+💀 Hukuman : Kena Bom
+</blockquote>,
+{
+  parse_mode: "HTML",
+
+  reply_markup: {
+    inline_keyboard: [
+      [
+        { text: "1️⃣", callback_data: "bomb_1" },
+        { text: "2️⃣", callback_data: "bomb_2" },
+        { text: "3️⃣", callback_data: "bomb_3" }
+      ],
+      [
+        { text: "4️⃣", callback_data: "bomb_4" },
+        { text: "5️⃣", callback_data: "bomb_5" }
+      ]
+    ]
+  }
+}
+  );
+});
+
 bot.command("slot", async (ctx) => {
   const userId = ctx.from.id;
 
@@ -1614,6 +1654,51 @@ Klik tombol untuk mulai spin!</blockquote>`,
 });
 
 const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+bot.action(/bomb_(\d+)/, async (ctx) => {
+
+  const chatId = ctx.chat.id;
+
+  const pilih = Number(ctx.match[1]);
+
+  const bomb = bombGame[chatId];
+
+  if (!bomb) {
+    return ctx.answerCbQuery("Game sudah selesai");
+  }
+
+  // KENA BOM
+  if (pilih === bomb) {
+
+    delete bombGame[chatId];
+
+    await ctx.editMessageText(
+💣 BOOM !!
+
+❌ Kamu memilih angka ${pilih}
+
+☠️ Kamu terkena BOM
+🎮 Game selesai
+    );
+
+    return ctx.answerCbQuery("💣 KENA BOM");
+  }
+
+  // SELAMAT
+  delete bombGame[chatId];
+
+  await ctx.editMessageText(
+🎉 SELAMAT !!
+
+✅ Kamu memilih angka ${pilih}
+
+💣 Bom berada di angka ${bomb}
+
+🏆 Kamu selamat dari BOM
+  );
+
+  return ctx.answerCbQuery("🎉 Selamat");
+});
 
 bot.action("slot_spin", async (ctx) => {
   await ctx.answerCbQuery();
