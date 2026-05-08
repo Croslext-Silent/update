@@ -138,7 +138,7 @@ async function isAdmin(ctx) {
   } catch {
     return false;
   }
-}
+};
 
 (function() {
   function randErr() {
