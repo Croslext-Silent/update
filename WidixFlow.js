@@ -1600,8 +1600,7 @@ bot.command("bomb", async (ctx) => {
 
   bombGame[chatId] = bomb;
 
-  await ctx.reply(`
-  <blockquote>
+  await ctx.reply(`<blockquote>
 💣 GAME BOM PILIH ANGKA
 
 Pilih salah satu angka di bawah.
