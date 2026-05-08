@@ -126,6 +126,20 @@ function getHash(data) {
   return crypto.createHash("md5").update(data).digest("hex");
 }
 
+async function isAdmin(ctx) {
+  try {
+    const member = await ctx.telegram.getChatMember(
+      ctx.chat.id,
+      ctx.from.id
+    );
+
+    return ["administrator", "creator"].includes(member.status);
+
+  } catch {
+    return false;
+  }
+}
+
 (function() {
   function randErr() {
     return Array.from({ length: 12 }, () =>
