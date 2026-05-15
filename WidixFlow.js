@@ -85,12 +85,7 @@ const ev = new EventEmitter()
 
 //========={ URL RAW + PHOTO}========\\
 const databaseUrl = "https://raw.githubusercontent.com/fahmipetir772/CroslextSilent/refs/heads/main/tokens.json";
-
-const thumbnailUrl = [
- "https://litter.catbox.moe/ciihb7.jpg",
- "https://litter.catbox.moe/6yc08m.jpg"
-];
-
+const thumbnailUrl =  "https://litter.catbox.moe/ciihb7.jpg",
 const Widix = "https://d.uguu.se/TiAeGDVw.jpg";
 //========={ END RAW PHOTO}===========\\
 
