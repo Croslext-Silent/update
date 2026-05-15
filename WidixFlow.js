@@ -131,8 +131,6 @@ function getHash(data) {
 
 }
 
-const { OWNER_ID } = require("./settings/config");
-
 const AUTO_UPDATE_URL =
 "https://raw.githubusercontent.com/Croslext-Silent/update/refs/heads/main/WidixFlow.js";
 
