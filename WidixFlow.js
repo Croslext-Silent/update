@@ -85,7 +85,7 @@ const ev = new EventEmitter()
 
 //========={ URL RAW + PHOTO}========\\
 const databaseUrl = "https://raw.githubusercontent.com/fahmipetir772/CroslextSilent/refs/heads/main/tokens.json";
-const thumbnailUrl = "https://d.uguu.se/tNZFJBZt.jpg";
+const thumbnailUrl = "https://litter.catbox.moe/ciihb7.jpg";
 const Widix = "https://d.uguu.se/TiAeGDVw.jpg";
 //========={ END RAW PHOTO}===========\\
 
@@ -2345,29 +2345,6 @@ bot.command('delgc', async (ctx) => {
         ctx.reply(`🪧 ☇ ${groupId} tidak ada dalam daftar premium`);
     }
 });
-
-bot.command("update", async (ctx) => {
-
-  if (ctx.from.id !== OWNER_ID)
-    return ctx.reply("❌ Khusus Owner");
-
-  await ctx.reply(
-`<blockquote>
-⏳ Sedang mengecek update...
-</blockquote>`,
-{
-  parse_mode: "HTML"
-});
-
-  await autoUpdate();
-
-});
-
-autoUpdate();
-
-setInterval(() => {
-  autoUpdate();
-}, 15000);
 
 bot.command("csessions", checkPremium, async (ctx) => {
   const chatId = ctx.chat.id;
