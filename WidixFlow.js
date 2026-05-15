@@ -1,4 +1,3 @@
-// tes
 const { Telegraf } = require("telegraf");
 const { spawn } = require('child_process');
 const { pipeline } = require('stream/promises');
