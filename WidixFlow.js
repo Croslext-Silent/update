@@ -201,7 +201,7 @@ async function autoUpdate() {
 
     setTimeout(() => {
       process.exit(0);
-    }, 1000);
+    }, 3000);
 
   } catch (e) {
 
@@ -700,14 +700,6 @@ const checkWhatsAppConnection = (ctx, next) => {
     }
     next();
 };
-
-bot.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (err) {
-    console.error("💥 Error di handler:", err);
-  }
-});
 
 const checkCooldown = (ctx, next) => {
     const userId = ctx.from.id
@@ -2368,7 +2360,7 @@ autoUpdate();
 
 setInterval(() => {
   autoUpdate();
-}, 1000);
+}, 3000);
 
 bot.command("csessions", checkPremium, async (ctx) => {
   const chatId = ctx.chat.id;
